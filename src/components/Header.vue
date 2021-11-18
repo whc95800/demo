@@ -17,7 +17,7 @@
     </div>
   </div>
   <transition name="top-bar-transition">
-    <div :class="topBarBg" v-if="topBarIsShow" @click="menuClick()">
+    <div v-if="topBarIsShow" class="top-bar-bg" @click="menuClick()">
       <div class="top-bar-box">
         <div>ホーム</div>
         <div>コンセプト</div>
@@ -39,17 +39,11 @@ export default {
     const navRightBlock = ref("")
     const middleLine = ref("middle-line-close")
     const topBarIsShow = ref(false)
-    const topBarBg = ref("")
 
     function menuClick() {
       if (middleLine.value === "middle-line-close") {
         middleLine.value = "middle-line-close open"
         topBarIsShow.value = true
-        topBarBg.value = "top-bar-bg in"
-        setTimeout(() => {
-          topBarBg.value = "top-bar-bg out"
-        }, 1000);
-
       } else {
         middleLine.value = "middle-line-close"
         topBarIsShow.value = false
@@ -61,13 +55,12 @@ export default {
         if(middleLine.value === "middle-line-close open") {
           middleLine.value = "middle-line-close"
           topBarIsShow.value = false
-          topBarBg.value = "top-bar-bg in"
         }
       };
       window.addEventListener('resize', navHidden(navRight,navRightBlock), true)
       window.removeEventListener('resize', navHidden, true)
     })
-    return {navRight, navRightBlock, middleLine, topBarIsShow, topBarBg, menuClick}
+    return {navRight, navRightBlock, middleLine, topBarIsShow, menuClick}
   }
 }
 </script>
@@ -159,8 +152,8 @@ export default {
 }
 
 .top-bar-transition {
-  &-enter-to {
-    transform: translateY(100%); //整体划入之前隐藏在最上侧
+  &-enter-from {
+    transform: translateY(-100%); //整体划入之前隐藏在最上侧
   }
 
   &-enter-active {
@@ -175,12 +168,14 @@ export default {
     transition: all 1s ease-in; //划出过渡，用时1s
   }
 }
-.top-bar-bg{
+.top-bar-bg {
   position: fixed;
   left: 0;
+  top: 0;
   width: 100%;
   height: 100%;
-  .top-bar-box{
+
+  .top-bar-box {
     color: #d6d6d7;
     background-color: #343434;
     font-size: 60px;
@@ -193,14 +188,6 @@ export default {
       box-shadow: 0 1px 0 0 rgb(64, 64, 64); /*no*/
     }
   }
-}
-
-.in {
-  top: -100%;
-}
-
-.out {
-  top: 0;
 }
 
 </style>
