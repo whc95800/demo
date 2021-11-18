@@ -17,7 +17,7 @@
     </div>
   </div>
   <transition name="top-bar-transition">
-    <div class="top-bar-bg" v-if="sidebarIsShow" @click="menuClick()">
+    <div :class="topBarBg" v-if="topBarIsShow" @click="menuClick()">
       <div class="top-bar-box">
         <div>ホーム</div>
         <div>コンセプト</div>
@@ -38,35 +38,36 @@ export default {
     const navRight = ref("")
     const navRightBlock = ref("")
     const middleLine = ref("middle-line-close")
-    const sidebarIsShow = ref(false)
-    const sidebarBgc = ref("")
-    function menuClick(){
-      if(middleLine.value === "middle-line-close"){
-        middleLine.value = "middle-line-close open"
-        sidebarIsShow.value = true
-        sidebarBgc.value = "sidebar-bgc in"
-        setTimeout(() =>{
-          sidebarBgc.value = "sidebar-bgc out"
-        },500);
+    const topBarIsShow = ref(false)
+    const topBarBg = ref("")
 
-      }else {
+    function menuClick() {
+      if (middleLine.value === "middle-line-close") {
+        middleLine.value = "middle-line-close open"
+        topBarIsShow.value = true
+        topBarBg.value = "top-bar-bg in"
+        setTimeout(() => {
+          topBarBg.value = "top-bar-bg out"
+        }, 1000);
+
+      } else {
         middleLine.value = "middle-line-close"
-        sidebarIsShow.value = false
+        topBarIsShow.value = false
       }
     }
     onMounted(() => {
       window.onresize = () => {
         navHidden(navRight,navRightBlock);
-        if(middleLine.value === "middle-line-close open"){
+        if(middleLine.value === "middle-line-close open") {
           middleLine.value = "middle-line-close"
-          sidebarIsShow.value = false
-          sidebarBgc.value = "sidebar-bgc in"
+          topBarIsShow.value = false
+          topBarBg.value = "top-bar-bg in"
         }
       };
       window.addEventListener('resize', navHidden(navRight,navRightBlock), true)
       window.removeEventListener('resize', navHidden, true)
     })
-    return{navRight,navRightBlock,middleLine,sidebarIsShow,sidebarBgc,menuClick}
+    return {navRight, navRightBlock, middleLine, topBarIsShow, topBarBg, menuClick}
   }
 }
 </script>
@@ -158,23 +159,24 @@ export default {
 }
 
 .top-bar-transition {
-  &-enter{
-    transform: translateY(-100%);  //整体划入之前隐藏在最上侧
+  &-enter-to {
+    transform: translateY(100%); //整体划入之前隐藏在最上侧
   }
+
   &-enter-active {
-    transition: all 1s ease;  //划入过渡，用时1s
+    transition: all 1s ease; //划入过渡，用时1s
   }
+
   &-leave-to {
     transform: translateY(-100%); //整体划出之后隐藏在最上侧
   }
+
   &-leave-active {
     transition: all 1s ease-in; //划出过渡，用时1s
   }
 }
 .top-bar-bg{
   position: fixed;
-  top: 0;
-  transform: translateY(0%);
   left: 0;
   width: 100%;
   height: 100%;
@@ -182,15 +184,23 @@ export default {
     color: #d6d6d7;
     background-color: #343434;
     font-size: 60px;
-    div{
+
+    div {
       height: 200px;
-      line-height:200px;
+      line-height: 200px;
       margin: auto;
       text-align: center;
-      box-shadow: 0 1px 0 0 rgb(64, 64, 64);/*no*/
+      box-shadow: 0 1px 0 0 rgb(64, 64, 64); /*no*/
     }
   }
 }
 
+.in {
+  top: -100%;
+}
+
+.out {
+  top: 0;
+}
 
 </style>
