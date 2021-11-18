@@ -5,11 +5,9 @@
         <img src="../assets/img/logo.png" height="38" width="250" alt=""/>
       </div>
       <div :class="navRight">
-        <div>ホーム</div>
-        <div>コンセプト</div>
-        <div>ホテル一覧</div>
-        <div>アクセス</div>
-        <div>お問い合わせ</div>
+        <div v-for="(item,index) in navList" :key="index" @click="this.$router.push({path:`/${item.link}`})">
+          {{ item.name }}
+        </div>
       </div>
       <div :class="navRightBlock" @click="menuClick()">
         <div :class="middleLine"></div>
@@ -19,11 +17,9 @@
   <transition name="top-bar-transition">
     <div v-if="topBarIsShow" class="top-bar-bg" @click="menuClick()">
       <div class="top-bar-box">
-        <div>ホーム</div>
-        <div>コンセプト</div>
-        <div>ホテル一覧</div>
-        <div>アクセス</div>
-        <div>お問い合わせ</div>
+        <div v-for="(item,index) in navList" :key="index" @click="this.$router.push({path:`/${item.link}`})">
+          {{ item.name }}
+        </div>
       </div>
     </div>
   </transition>
@@ -39,19 +35,23 @@ export default {
     const navRightBlock = ref("")
     const middleLine = ref("middle-line-close")
     const topBarIsShow = ref(false)
+    const navList = ref([
+      {name: "ホーム", link: "home"},
+      {name: "コンセプト", link: "concept"},
+      {name: "ホテル一覧", link: "hotels"},
+      {name: "お問い合わせ", link: "contact"},
+    ])
 
     function menuClick() {
       if (middleLine.value === "middle-line-close") {
         middleLine.value = "middle-line-close open"
-        topBarIsShow.value = true
-      } else {
-        middleLine.value = "middle-line-close"
-        topBarIsShow.value = false
-      }
+      } else middleLine.value = "middle-line-close"
+      topBarIsShow.value = !topBarIsShow.value
     }
+
     onMounted(() => {
       window.onresize = () => {
-        navHidden(navRight,navRightBlock);
+        navHidden(navRight, navRightBlock);
         if(middleLine.value === "middle-line-close open") {
           middleLine.value = "middle-line-close"
           topBarIsShow.value = false
@@ -60,7 +60,7 @@ export default {
       window.addEventListener('resize', navHidden(navRight,navRightBlock), true)
       window.removeEventListener('resize', navHidden, true)
     })
-    return {navRight, navRightBlock, middleLine, topBarIsShow, menuClick}
+    return {navRight, navRightBlock, middleLine, topBarIsShow, navList, menuClick}
   }
 }
 </script>
