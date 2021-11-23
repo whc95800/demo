@@ -34,13 +34,13 @@
 
 <script>
 import {onMounted, ref} from "vue";
-import {navHidden} from "@/api";
+import {navRightBlockHidden, navRightHidden} from "@/api";
 
 export default {
   name: "Header",
   setup() {
-    const navRight = ref("")
-    const navRightBlock = ref("")
+    const navRight = ref('')
+    const navRightBlock = ref('')
     const middleLine = ref("middle-line-close")
     const topBarIsShow = ref(false)
     const navList = ref([
@@ -57,17 +57,17 @@ export default {
       topBarIsShow.value = !topBarIsShow.value
     }
 
-
     onMounted(() => {
       window.onresize = () => {
-        navHidden(navRight, navRightBlock);
-        if(middleLine.value === "middle-line-close open") {
+        navRightHidden(navRight);
+        navRightBlockHidden(navRightBlock);
+        if (middleLine.value === "middle-line-close open") {
           middleLine.value = "middle-line-close"
           topBarIsShow.value = false
         }
       }
-      window.addEventListener('resize', navHidden(navRight,navRightBlock), true)
-      window.removeEventListener('resize', navHidden, true)
+      window.addEventListener('resize', {navRightHidden, navRightBlockHidden}, true)
+      window.removeEventListener('resize', {navRightHidden, navRightBlockHidden}, true)
     })
     return {navRight, navRightBlock, middleLine, topBarIsShow, navList, menuClick,}
   }
@@ -137,6 +137,7 @@ export default {
         transition: all 0.5s ease;
       }
     }
+
     .nav-right-block {
       width: 30px;
       height: 30px;
@@ -166,6 +167,7 @@ export default {
           background-color: #d6d6d7;
           transition: all 0.5s ease;
         }
+
         &::after { //后一条线
           content: "";
           position: absolute;
@@ -177,7 +179,6 @@ export default {
           transition: all 0.5s ease;
         }
       }
-
       .open {
         background-color: transparent;
 
@@ -207,7 +208,6 @@ export default {
         opacity: 0;
         filter: alpha(opacity=0); //整体淡出
       }
-
       &-leave-active {
         transition: all 0.5s ease-in; //淡出过渡，用 0.5s
       }
