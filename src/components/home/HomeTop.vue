@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <div :class="unitsCard">
+    <div class="units-card">
       <div class="uc-nav">
         <div class="uc-nav-link">
           <span v-for="(item,index) in ucNavList" :key="index">{{ item.name }}</span>
@@ -11,8 +11,7 @@
 </template>
 
 <script>
-import {onMounted, ref} from "vue";
-import {unitsCardHidden} from "@/api";
+import {ref} from "vue";
 
 export default {
   name: "HomeTop",
@@ -24,17 +23,8 @@ export default {
       {name: "航空券＋宿泊", key: "combo"},
       {name: "現地ツアー", key: "tour"},
     ]);
-    const unitsCard = ref('')
 
-    onMounted(() => {
-      window.onresize = () => {
-        unitsCardHidden(unitsCard);
-      }
-      window.addEventListener('resize', unitsCardHidden, true)
-      window.removeEventListener('resize', unitsCardHidden, true)
-    })
-
-    return {ucNavList, unitsCard}
+    return {ucNavList}
   }
 }
 </script>
