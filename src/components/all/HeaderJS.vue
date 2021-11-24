@@ -5,7 +5,7 @@
         <img alt="" height="38" src="../../assets/img/logo.png" width="250"/>
       </div>
       <transition name="nav-bar-transition">
-        <div class="nav-right">
+        <div v-show="navRight" class="nav-right">
           <div v-for="(item,index) in navList" :key="index" class="link"
                @click="this.$router.push({path:`/${item.link}`})">
             <a>{{ item.name }}</a>
@@ -13,7 +13,7 @@
         </div>
       </transition>
       <transition name="nav-block-transition">
-        <div class="nav-right-block" @click="menuClick()">
+        <div v-show="navRightBlock" class="nav-right-block" @click="menuClick()">
           <span :class="middleLine"></span>
         </div>
       </transition>
@@ -33,11 +33,14 @@
 </template>
 
 <script>
-import {ref} from "vue";
+import {onMounted, ref} from "vue";
+import {hidden} from "@/api";
 
 export default {
-  name: "Header",
+  name: "HeaderJS",
   setup() {
+    const navRight = ref('')
+    const navRightBlock = ref('')
     const middleLine = ref("middle-line-close")
     const topBarIsShow = ref(false)
     const navList = ref([
@@ -54,7 +57,19 @@ export default {
       topBarIsShow.value = !topBarIsShow.value
     }
 
-    return {middleLine, topBarIsShow, navList, menuClick,}
+    onMounted(() => {
+      hidden(navRight, navRightBlock);
+      window.onresize = () => {
+        hidden(navRight, navRightBlock);
+        if (middleLine.value === "middle-line-close open") {
+          middleLine.value = "middle-line-close"
+          topBarIsShow.value = false
+        }
+      }
+      window.addEventListener('resize', hidden)
+      window.removeEventListener('resize', hidden)
+    })
+    return {navRight, navRightBlock, middleLine, topBarIsShow, navList, menuClick,}
   }
 }
 </script>
@@ -66,6 +81,7 @@ export default {
   display: flex;
   justify-content: center;
   background-color: #343434;
+
   .nav-bar {
     width: 1186px;
     padding-left: 24px;
@@ -198,53 +214,41 @@ export default {
         transition: all 0.5s ease-in; //淡出过渡，用 0.5s
       }
     }
-
-    @media (max-width: 762px) {
-      .nav-right {
-        display: none;
-      }
-    }
-
-    @media (min-width: 762px) {
-      .nav-right-block {
-        display: none;
-      }
-    }
   }
-}
 
-.top-bar-bg {
-  position: fixed;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(52, 53, 53, 0.9);
+  .top-bar-bg {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(52, 53, 53, 0.9);
 
-  .top-bar-box {
-    color: rgba(214, 214, 215, 1);
-    font-size: 60px;
-    text-align: center;
-
-    .logo-img {
-      margin-top: 36px;
-    }
-
-    .link-box {
-      font-size: 14px;
-      height: 80px;
-      width: 60%;
-      line-height: 80px;
-      margin: auto;
+    .top-bar-box {
+      color: rgba(214, 214, 215, 1);
+      font-size: 60px;
       text-align: center;
-      box-shadow: 0 1px 0 0 #ffff;
-      transition: all 0.5s ease-in-out;
-      cursor: pointer;
-    }
 
-    .link-box:hover {
-      color: white;
-      transition: all 0.5s ease;
+      .logo-img {
+        margin-top: 36px;
+      }
+
+      .link-box {
+        font-size: 14px;
+        height: 80px;
+        width: 60%;
+        line-height: 80px;
+        margin: auto;
+        text-align: center;
+        box-shadow: 0 1px 0 0 #ffff;
+        transition: all 0.5s ease-in-out;
+        cursor: pointer;
+      }
+
+      .link-box:hover {
+        color: white;
+        transition: all 0.5s ease;
+      }
     }
   }
 }
