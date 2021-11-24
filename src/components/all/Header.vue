@@ -12,11 +12,9 @@
           </div>
         </div>
       </transition>
-      <transition name="nav-block-transition">
-        <div class="nav-right-block" @click="menuClick()">
-          <span :class="middleLine"></span>
-        </div>
-      </transition>
+      <div class="nav-right-block" @click="menuClick()">
+        <span :class="middleLine"></span>
+      </div>
     </div>
   </div>
   <transition name="top-bar-transition">
@@ -100,26 +98,6 @@ export default {
       align-items: center;
       overflow: hidden;
 
-      &-enter-from {
-        -webkit-transform: translateX(185%); //整体从右侧划入
-      }
-    ;
-
-      &-enter-active {
-        -webkit-transition: all 0.5s ease .5s; //划入过渡，用 0.5s 延迟0.5s进入
-      }
-    ;
-
-      &-leave-to {
-        -webkit-transform: translateX(185%); //整体右划出之后隐藏
-      }
-    ;
-
-      &-leave-active {
-        -webkit-transition: all 0.5s ease-in; //划出过渡，用 0.5s
-      }
-    ;
-
       .link {
         height: 72px;
         color: #d6d6d7;
@@ -179,15 +157,15 @@ export default {
       }
 
       .open {
-        background-color: transparent;
+        background-color: transparent; //中间的线变透明
 
         &::before {
-          transform: translateY(9px) rotate(-45deg); //上方的线逆时针旋转90°
+          transform: translateY(9px) rotate(-45deg); //上方的线向下移动9并且逆时针旋转45°
           transition: all 0.5s ease;
         }
 
         &::after {
-          transform: translateY(-9px) rotate(45deg); //中间的线顺时针旋转45°
+          transform: translateY(-9px) rotate(45deg); //下方的线向上移动9并且顺时针旋转45°
           transition: all 0.5s ease;
         }
       }
@@ -200,26 +178,6 @@ export default {
 
       .nav-right-block {
         display: block;
-      }
-    }
-
-    .nav-block-transition {
-      &-enter-from {
-        opacity: 0;
-        filter: alpha(opacity=0); //整体淡入
-      }
-
-      &-enter-active {
-        transition: all 0.5s ease .6s; //淡入过渡，用 0.5s 延迟0.6秒进入
-      }
-
-      &-leave-to {
-        opacity: 0;
-        filter: alpha(opacity=0); //整体淡出
-      }
-
-      &-leave-active {
-        transition: all 0.5s ease-in; //淡出过渡，用 0.5s
       }
     }
   }
