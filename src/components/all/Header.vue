@@ -2,7 +2,7 @@
   <div class="nav">
     <div class="nav-bar">
       <div class="nav-left">
-        <img alt="" height="38" src="../../assets/img/logo.png" width="250"/>
+        <img id="logo" alt="" src="../../assets/img/logo.png"/>
       </div>
       <transition>
         <div class="nav-right">
@@ -91,7 +91,18 @@ export default {
       margin: 4px 0;
       display: flex;
       align-items: center;
+
+      #logo {
+        height: 38px;
+      }
+
+      @media (max-width: 810px) {
+        #logo {
+          height: 30px;
+        }
+      }
     }
+
     .nav-right {
       height: 72px;
       display: flex;
@@ -171,7 +182,7 @@ export default {
       }
     }
 
-    @media (max-width: 768px) {
+    @media (max-width: 810px) {
       .nav-right {
         display: none;
       }
