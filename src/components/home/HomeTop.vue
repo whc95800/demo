@@ -2,9 +2,12 @@
   <div class="home">
     <div class="units-card">
       <div class="uc-nav">
-        <div class="uc-nav-link">
-          <span v-for="(item,index) in ucNavList" :key="index">{{ item.name }}</span>
-        </div>
+        <a v-for="(item,index) in ucNavList" :key="index" class="uc-nav-link" @click="togglePage(index)">
+          <span>{{ item.name }}</span>
+        </a>
+      </div>
+      <div style="width: auto;height: auto;padding: 12px 24px">
+        <component :is="comName"/>
       </div>
     </div>
   </div>
@@ -12,19 +15,47 @@
 
 <script>
 import {ref} from "vue";
+import HotelPicker from "@/components/home/hometop/HotelPicker";
+import TicketPicker from "@/components/home/hometop/TicketPicker";
+import CarPicker from "@/components/home/hometop/CarPicker";
+import ComboPicker from "@/components/home/hometop/ComboPicker";
+import TourPicker from "@/components/home/hometop/TourPicker";
+
 
 export default {
   name: "HomeTop",
+  components: {HotelPicker, CarPicker, TicketPicker, ComboPicker, TourPicker},
   setup() {
     const ucNavList = ref([
-      {name: "宿・ホテル", key: "hotel"},
-      {name: "航空券", key: "ticket"},
-      {name: "レンタカー", key: "car"},
-      {name: "航空券＋宿泊", key: "combo"},
-      {name: "現地ツアー", key: "tour"},
-    ]);
+      {name: "宿・ホテル", key: "HotelPicker"},
+      {name: "航空券", key: "TicketPicker"},
+      {name: "レンタカー", key: "CarPicker"},
+      {name: "航空券＋宿泊", key: "ComboPicker"},
+      {name: "現地ツアー", key: "TourPicker"},
+    ])
+    const activeKey = ref('1')
+    const comName = ref('HotelPicker')
 
-    return {ucNavList}
+    function togglePage(n) {
+      switch (n) {
+        case 0:
+          comName.value = "HotelPicker";
+          break;
+        case 1:
+          comName.value = "TicketPicker";
+          break;
+        case 2:
+          comName.value = "CarPicker";
+          break;
+        case 3:
+          comName.value = "ComboPicker";
+          break;
+        case 4:
+          comName.value = "TourPicker";
+      }
+    }
+
+    return {ucNavList, activeKey, togglePage, comName}
   }
 }
 </script>
@@ -37,33 +68,54 @@ export default {
 
   .units-card {
     width: 1172px;
-    height: auto;
-    margin: 40px 24px;
+    margin: 48px 24px;
     padding: 0 14px;
-    display: flex;
-    justify-content: space-between;
     align-items: center;
     border-radius: 7px;
     border: 1px solid #D7D4D2;
     transition: all 0.5s ease;
+
+    .uc-nav {
+      width: 100%;
+      height: 52px;
+      margin-top: 12px;
+      display: flex;
+      justify-content: center;
+      border-bottom: 1px solid #D7D4D2;
+    }
+
+    .uc-nav-link {
+      transition: all 80ms linear;
+
+      span {
+        height: 50px;
+        color: #3E445BFF;
+        padding: 0 16px;
+        line-height: 50px;
+      }
+    }
+
+    .uc-nav-link:hover {
+      border-bottom: 2px solid #343434;
+    }
   }
 
-  .uc-nav {
-    width: 100%;
-    height: 50px;
-    border-bottom: 1px solid #D7D4D2;
-    margin-top: 12px;
-  }
+  @media (max-width: 575px) {
+    .units-card {
+      width: 100%;
+      margin: 0;
+      padding: 0;
+      border: 0;
 
-  .uc-nav-link {
-    height: 100%;
-    display: flex;
-    justify-content: center;
+      .uc-nav {
+        justify-content: space-between;
+        white-space: nowrap;
+        overflow-x: scroll;
 
-    span {
-      display: block;
-      padding: 0 16px;
-      line-height: 350%;
+        .uc-nav-link {
+          font-weight: bold;
+        }
+      }
     }
   }
 }
