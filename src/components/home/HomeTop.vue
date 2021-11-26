@@ -27,11 +27,11 @@ export default {
   components: {HotelPicker, CarPicker, TicketPicker, ComboPicker, TourPicker},
   setup() {
     const ucNavList = ref([
-      {name: "宿・ホテル", key: "HotelPicker"},
-      {name: "航空券", key: "TicketPicker"},
-      {name: "レンタカー", key: "CarPicker"},
-      {name: "航空券＋宿泊", key: "ComboPicker"},
-      {name: "現地ツアー", key: "TourPicker"},
+      {name: "宿・ホテル"},
+      {name: "航空券"},
+      {name: "レンタカー"},
+      {name: "航空券＋宿泊"},
+      {name: "現地ツアー"},
     ])
     const activeKey = ref('1')
     const comName = ref('HotelPicker')
@@ -39,7 +39,7 @@ export default {
     function togglePage(n) {
       switch (n) {
         case 0:
-          comName.value = "HotelPicker";
+          comName.value = 'HotelPicker';
           break;
         case 1:
           comName.value = "TicketPicker";
