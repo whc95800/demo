@@ -33,7 +33,6 @@ export default {
       {name: "航空券＋宿泊"},
       {name: "現地ツアー"},
     ])
-    const activeKey = ref('1')
     const comName = ref('HotelPicker')
 
     function togglePage(n) {
@@ -55,7 +54,7 @@ export default {
       }
     }
 
-    return {ucNavList, activeKey, togglePage, comName}
+    return {ucNavList, togglePage, comName}
   }
 }
 </script>
