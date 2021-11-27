@@ -57,30 +57,26 @@ export default {
       topBarIsShow.value = !topBarIsShow.value
     }
 
-    function menuSwitch() {
+    function hidden() {
+      navRight.value = window.innerWidth >= 737;
+      navRightBlock.value = window.innerWidth < 737;
+      if (middleLine.value === "middle-line-close open") {
+        middleLine.value = "middle-line-close"
+        topBarIsShow.value = false
+      }
       if (topBarIsShow.value === true) {
         topBarIsShow.value = !topBarIsShow.value
         middleLine.value = "middle-line-close"
       }
     }
 
-    function hidden() {
-      navRight.value = window.innerWidth >= 730;
-      navRightBlock.value = window.innerWidth < 730;
-      if (middleLine.value === "middle-line-close open") {
-        middleLine.value = "middle-line-close"
-        topBarIsShow.value = false
-      }
-    }
-
     onMounted(() => {
       hidden();
-      window.addEventListener('resize', menuSwitch)
-      window.addEventListener('resize', hidden)
     })
 
+    window.addEventListener('resize', hidden)
+
     onUnmounted(() => {
-      window.removeEventListener('resize', menuSwitch)
       window.removeEventListener('resize', hidden)
     })
 
@@ -106,8 +102,7 @@ export default {
     .nav-bar {
       width: 1186px;
       height: 72px;
-      padding-left: 24px;
-      padding-right: 12px;
+      padding: 0 24px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -129,6 +124,7 @@ export default {
         height: 72px;
         display: flex;
         align-items: center;
+        user-select: none;
         overflow: hidden;
 
         .link {
@@ -137,7 +133,7 @@ export default {
           font-size: 14px;
           text-align: center;
           line-height: 72px;
-          margin: 0 25px;
+          margin: 0 0 0 50px;
           cursor: pointer;
           transition: all 0.5s ease-in-out;
         }
@@ -151,7 +147,6 @@ export default {
       .nav-right-block {
         width: 30px;
         height: 30px;
-        margin-right: 8px;
 
         .middle-line-close {
           display: block;
@@ -211,6 +206,7 @@ export default {
     width: 100%;
     height: 100%;
     background-color: rgba(52, 53, 53, 0.9);
+    user-select: none;
     z-index: 0;
 
     .top-bar-box {
