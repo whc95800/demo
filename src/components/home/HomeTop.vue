@@ -54,7 +54,7 @@ export default {
     const navWidth = ref()
 
     onMounted(() => {
-      window.addEventListener('resize', debounce(widthChange, 450), true)
+      window.addEventListener('resize', debounce(widthChange, 430), true)
       widthChange();
     })
 
