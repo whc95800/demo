@@ -88,7 +88,7 @@ export default {
 <style lang="less" scoped>
 .nav-body {
   position: relative;
-  z-index: 0;
+  z-index: 1;
 
   .nav {
     position: relative;
@@ -207,7 +207,7 @@ export default {
     height: 100%;
     background-color: rgba(52, 53, 53, 0.9);
     user-select: none;
-    z-index: 0;
+    z-index: 10;
 
     .top-bar-box {
       margin-top: 56px;

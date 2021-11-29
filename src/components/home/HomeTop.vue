@@ -1,17 +1,17 @@
 <template>
   <div class="home">
     <div class="units-card">
-      <transition name="bar-lighter-transition">
-        <ul class="uc-nav">
+        <ul ref="tabBarRef5" class="uc-nav">
           <li v-for="(item,index) in ucNavList" :key="index"
-              :class="['uc-nav-link',activeIndex === index?'risk-active':'']" @click="togglePage(index)">
+              :ref='"tabBarRef"+index'
+              :class="['uc-nav-link',activeIndex === index?'risk-active':'']"
+              @click="togglePage(index)">
             <a>
               <span class="span-text">{{ item.name }}</span>
             </a>
           </li>
           <li :style="tabLighter" class="tab-highlighter"></li>
         </ul>
-      </transition>
       <div class="com-style">
         <component :is="comName"/>
       </div>
@@ -20,14 +20,12 @@
 </template>
 
 <script>
-import {ref} from "vue";
+import {ref, reactive, toRefs, onUnmounted, onMounted, computed} from "vue";
 import HotelPicker from "@/components/home/hometop/HotelPicker";
 import TicketPicker from "@/components/home/hometop/TicketPicker";
 import CarPicker from "@/components/home/hometop/CarPicker";
 import ComboPicker from "@/components/home/hometop/ComboPicker";
 import TourPicker from "@/components/home/hometop/TourPicker";
-
-
 export default {
   name: "HomeTop",
   components: {HotelPicker, CarPicker, TicketPicker, ComboPicker, TourPicker},
@@ -41,21 +39,56 @@ export default {
     ])
     const comName = ref('HotelPicker')
     const activeIndex = ref(0)
-    const tabLighter = ref('transform: translateX(0); width: 111.2px;')
+    const tabLighter = ref('')
+    const state = reactive({
+      tabBarRef5: null,
+      tabBarRef0: null, // HOME导航栏组件
+      tabBarRef1: null, // HOME导航栏组件
+      tabBarRef2: null, // HOME导航栏组件
+      tabBarRef3: null, // HOME导航栏组件
+      tabBarRef4: null, // HOME导航栏组件
+    })
+    const tabBarRefProxy = ref()
+    const barIndex = ref(0)
+
+    onMounted(() => {
+      widthChange()
+    })
+
+    window.addEventListener('resize', widthChange)
+
+    onUnmounted(() => {
+      window.removeEventListener('resize', widthChange)
+    })
+
+    function widthChange() {
+      tabBarRefProxy.value = [
+        state.tabBarRef0.offsetWidth,
+        state.tabBarRef1.offsetWidth,
+        state.tabBarRef2.offsetWidth,
+        state.tabBarRef3.offsetWidth,
+        state.tabBarRef4.offsetWidth,
+        state.tabBarRef5.offsetWidth
+      ]
+      togglePage(barIndex.value)
+    }
 
     function togglePage(n) {
+      const allWidth = ref(tabBarRefProxy.value[5])
+      const navWidth = ref(tabBarRefProxy.value[0] + tabBarRefProxy.value[1] + tabBarRefProxy.value[2] + tabBarRefProxy.value[3] + tabBarRefProxy.value[4])
+      barIndex.value = n
+      const underBarWidth = computed(() => {
+        return "width:" + tabBarRefProxy.value[n] + "px;transform: translateX(" + ((allWidth.value - navWidth.value) / 2) + "px);"
+      })
       switch (n) {
         case 0:
           comName.value = 'HotelPicker';
-          tabLighter.value = 'transform: translateX(0); width: 111.2px;'
           break;
         case 1:
           comName.value = "TicketPicker";
-          tabLighter.value = 'transform: translateX(111.2px); width: 80px;'
           break;
         case 2:
           comName.value = "CarPicker";
-          tabLighter.value = 'transform: translateX(191.2px); width: 111.05px;'
           break;
         case 3:
           comName.value = "ComboPicker";
@@ -63,10 +96,11 @@ export default {
         case 4:
           comName.value = "TourPicker";
       }
+      tabLighter.value = underBarWidth.value
       activeIndex.value = n
     }
 
-    return {ucNavList, togglePage, comName, activeIndex, tabLighter}
+    return {ucNavList, comName, activeIndex, tabLighter, togglePage, ...toRefs(state),}
   }
 }
 </script>
@@ -93,6 +127,7 @@ export default {
       display: flex;
       justify-content: center;
       position: relative;
+      z-index: 0;
 
       .uc-nav-link {
         list-style-type: none;
@@ -100,6 +135,7 @@ export default {
         transition: all 0.3s ease;
 
         .span-text {
+          font-size: 14px;
           height: 50px;
           padding: 0 16px;
           line-height: 50px;
@@ -124,18 +160,6 @@ export default {
         list-style-type: none;
         transition: all 0.3s ease;
       }
-
-      .tab-highlighter-move {
-        transform: translateX(0) scaleY(1) scaleX(1);
-        width: 101.45px;
-      }
-
-      .tab-highlighter-move1 {
-        transform: translateX(101.45px) scaleY(1) scaleX(1);
-        width: 74px;
-      }
-
-
     }
 
     .com-style {
@@ -154,7 +178,7 @@ export default {
       border: 0;
 
       .uc-nav {
-        justify-content: start;
+        justify-content: center;
         white-space: nowrap;
         overflow-x: scroll;
         height: 40px;
@@ -163,17 +187,17 @@ export default {
           font-weight: bold;
 
           .span-text {
-            font-size: 14px;
             height: 40px;
             line-height: 40px;
           }
+        }
+
+        .tab-highlighter {
+          top: 38px;
         }
       }
     }
   }
 }
 
-.bar-lighter-transition {
-  transition: all 0.5s ease;
-}
 </style>
