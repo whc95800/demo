@@ -63,12 +63,12 @@ export default {
 
     function widthChange() {
       tabBarRefProxy.value = [
-        state.tabBarRef0.offsetWidth,
-        state.tabBarRef1.offsetWidth,
-        state.tabBarRef2.offsetWidth,
-        state.tabBarRef3.offsetWidth,
-        state.tabBarRef4.offsetWidth,
-        state.tabBarRef5.offsetWidth
+        state.tabBarRef0.valueOf().offsetWidth,
+        state.tabBarRef1.valueOf().offsetWidth,
+        state.tabBarRef2.valueOf().offsetWidth,
+        state.tabBarRef3.valueOf().offsetWidth,
+        state.tabBarRef4.valueOf().offsetWidth,
+        state.tabBarRef5.valueOf().offsetWidth
       ]
       togglePage(barIndex.value)
     }
@@ -76,6 +76,23 @@ export default {
     function togglePage(n) {
       const allWidth = ref(tabBarRefProxy.value[5])
       const navWidth = ref(tabBarRefProxy.value[0] + tabBarRefProxy.value[1] + tabBarRefProxy.value[2] + tabBarRefProxy.value[3] + tabBarRefProxy.value[4])
+
+      function xMove() {
+        let sum = 0
+        for (n; n > 0; n--) {
+          sum += (tabBarRefProxy.value[n - 1]);
+        }
+        return (((allWidth.value - navWidth.value) / 2) + sum)
+      }
+
+      function mxMove() {
+        let sum = 0
+        for (n; n > 0; n--) {
+          sum += tabBarRefProxy.value[n - 1];
+        }
+        return (sum)
+      }
+
       barIndex.value = n
       switch (n) {
         case 0:
@@ -95,16 +112,16 @@ export default {
       }
       if (window.innerWidth > 620) {
         const underBarWidth = computed(() => {
-          return "width:" + tabBarRefProxy.value[n] + "px;transform: translateX(" + ((allWidth.value - navWidth.value) / 2) + "px);"
+          return "width:" + tabBarRefProxy.value[n] + "px;transform: translateX(" + xMove() + "px);"
         })
         tabLighter.value = underBarWidth.value
       } else {
         const underBarWidth = computed(() => {
-          return "width:" + tabBarRefProxy.value[n] + "px;transform: translateX(0px);"
+          return "width:" + tabBarRefProxy.value[n] + "px;transform: translateX(" + mxMove() + "px);"
         })
         tabLighter.value = underBarWidth.value
       }
-      activeIndex.value = n
+      activeIndex.value = barIndex.value
     }
 
     return {ucNavList, comName, activeIndex, tabLighter, togglePage, ...toRefs(state),}
