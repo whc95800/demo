@@ -97,7 +97,6 @@ export default {
     display: flex;
     justify-content: center;
     background-color: #343434;
-    z-index: 10;
 
     .nav-bar {
       width: 1186px;
@@ -147,6 +146,7 @@ export default {
       .nav-right-block {
         width: 30px;
         height: 30px;
+        z-index: 11;
 
         .middle-line-close {
           display: block;

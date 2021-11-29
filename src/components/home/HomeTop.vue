@@ -77,9 +77,6 @@ export default {
       const allWidth = ref(tabBarRefProxy.value[5])
       const navWidth = ref(tabBarRefProxy.value[0] + tabBarRefProxy.value[1] + tabBarRefProxy.value[2] + tabBarRefProxy.value[3] + tabBarRefProxy.value[4])
       barIndex.value = n
-      const underBarWidth = computed(() => {
-        return "width:" + tabBarRefProxy.value[n] + "px;transform: translateX(" + ((allWidth.value - navWidth.value) / 2) + "px);"
-      })
       switch (n) {
         case 0:
           comName.value = 'HotelPicker';
@@ -96,7 +93,17 @@ export default {
         case 4:
           comName.value = "TourPicker";
       }
-      tabLighter.value = underBarWidth.value
+      if (window.innerWidth > 620) {
+        const underBarWidth = computed(() => {
+          return "width:" + tabBarRefProxy.value[n] + "px;transform: translateX(" + ((allWidth.value - navWidth.value) / 2) + "px);"
+        })
+        tabLighter.value = underBarWidth.value
+      } else {
+        const underBarWidth = computed(() => {
+          return "width:" + tabBarRefProxy.value[n] + "px;transform: translateX(0px);"
+        })
+        tabLighter.value = underBarWidth.value
+      }
       activeIndex.value = n
     }
 
@@ -178,7 +185,7 @@ export default {
       border: 0;
 
       .uc-nav {
-        justify-content: center;
+        justify-content: start;
         white-space: nowrap;
         overflow-x: scroll;
         height: 40px;
