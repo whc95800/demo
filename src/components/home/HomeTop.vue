@@ -54,13 +54,21 @@ export default {
     const navWidth = ref()
 
     onMounted(() => {
+      window.addEventListener('resize', debounce(widthChange, 450), true)
       widthChange();
-      window.addEventListener('resize', widthChange, true)
     })
 
     onUnmounted(() => {
       window.removeEventListener('resize', widthChange, true)
     })
+
+    function debounce(fn, wait) {
+      let timeoutID = null
+      return function () {
+        if (timeoutID != null) clearTimeout(timeoutID)
+        timeoutID = setTimeout(fn, wait)
+      }
+    }
 
     function widthChange() {
       tabBarRefProxy.value = [
@@ -71,8 +79,7 @@ export default {
         state.tabBarRef4.valueOf().offsetWidth,
         state.tabBarRef5.valueOf().offsetWidth,
       ]
-      togglePage(barIndex.value);
-      xMove(barIndex.value);
+      togglePage(barIndex.value)
     }
 
     function xMove(n) {
@@ -110,7 +117,7 @@ export default {
         case 4:
           comName.value = "TourPicker";
       }
-      tabLighter.value = "width:" + tabBarRefProxy.value[n] + "px;transform: translateX(" + xMove() + "px);"
+      tabLighter.value = "width:" + tabBarRefProxy.value[n] + "px;transform: translateX(" + xMove(n) + "px);"
       activeIndex.value = barIndex.value
     }
 
