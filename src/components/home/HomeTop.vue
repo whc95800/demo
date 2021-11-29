@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import {ref, reactive, toRefs, onUnmounted, onMounted, computed} from "vue";
+import {ref, reactive, toRefs, onUnmounted, onMounted} from "vue";
 import HotelPicker from "@/components/home/hometop/HotelPicker";
 import TicketPicker from "@/components/home/hometop/TicketPicker";
 import CarPicker from "@/components/home/hometop/CarPicker";
@@ -50,15 +50,16 @@ export default {
     })
     const tabBarRefProxy = ref()
     const barIndex = ref(0)
+    const allWidth = ref()
+    const navWidth = ref()
 
     onMounted(() => {
-      widthChange()
+      widthChange();
+      window.addEventListener('resize', widthChange, true)
     })
 
-    window.addEventListener('resize', widthChange)
-
     onUnmounted(() => {
-      window.removeEventListener('resize', widthChange)
+      window.removeEventListener('resize', widthChange, true)
     })
 
     function widthChange() {
@@ -68,32 +69,31 @@ export default {
         state.tabBarRef2.valueOf().offsetWidth,
         state.tabBarRef3.valueOf().offsetWidth,
         state.tabBarRef4.valueOf().offsetWidth,
-        state.tabBarRef5.valueOf().offsetWidth
+        state.tabBarRef5.valueOf().offsetWidth,
       ]
-      togglePage(barIndex.value)
+      togglePage(barIndex.value);
+      xMove(barIndex.value);
     }
 
-    function togglePage(n) {
-      const allWidth = ref(tabBarRefProxy.value[5])
-      const navWidth = ref(tabBarRefProxy.value[0] + tabBarRefProxy.value[1] + tabBarRefProxy.value[2] + tabBarRefProxy.value[3] + tabBarRefProxy.value[4])
-
-      function xMove() {
-        let sum = 0
+    function xMove(n) {
+      let sum = 0
+      if (window.innerWidth > 620) {
         for (n; n > 0; n--) {
           sum += (tabBarRefProxy.value[n - 1]);
         }
-        return (((allWidth.value - navWidth.value) / 2) + sum)
-      }
-
-      function mxMove() {
-        let sum = 0
+        return ((allWidth.value - navWidth.value) / 2 + sum)
+      } else {
         for (n; n > 0; n--) {
           sum += tabBarRefProxy.value[n - 1];
         }
         return (sum)
       }
+    }
 
+    function togglePage(n) {
       barIndex.value = n
+      allWidth.value = tabBarRefProxy.value[5]
+      navWidth.value = (tabBarRefProxy.value[0] + tabBarRefProxy.value[1] + tabBarRefProxy.value[2] + tabBarRefProxy.value[3] + tabBarRefProxy.value[4])
       switch (n) {
         case 0:
           comName.value = 'HotelPicker';
@@ -110,17 +110,7 @@ export default {
         case 4:
           comName.value = "TourPicker";
       }
-      if (window.innerWidth > 620) {
-        const underBarWidth = computed(() => {
-          return "width:" + tabBarRefProxy.value[n] + "px;transform: translateX(" + xMove() + "px);"
-        })
-        tabLighter.value = underBarWidth.value
-      } else {
-        const underBarWidth = computed(() => {
-          return "width:" + tabBarRefProxy.value[n] + "px;transform: translateX(" + mxMove() + "px);"
-        })
-        tabLighter.value = underBarWidth.value
-      }
+      tabLighter.value = "width:" + tabBarRefProxy.value[n] + "px;transform: translateX(" + xMove() + "px);"
       activeIndex.value = barIndex.value
     }
 
