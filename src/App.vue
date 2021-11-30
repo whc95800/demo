@@ -5,7 +5,7 @@
 </template>
 
 <style lang="less">
-body {
+* {
   font-family: "Centra No2", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
